@@ -17,7 +17,7 @@ namespace MaxAlive
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            if (args.Length == 0) throw new ArgumentException("Argument is empty collection", nameof(args));
+            
             do
             {
                 MainProcedure();
@@ -58,8 +58,14 @@ namespace MaxAlive
                     Console.WriteLine("Input # of people to be generated: " + sampleQuantity);
                     if (sampleQuantity > 0)
                     {
+                        
                         List<People> peoples = Samples.GeneratePeopleslList(sampleQuantity);
+                        //first approach, simple codes by Linq, but go through all people for each year's evaluation
                         Dictionary<int, int> resultYears = Process.GetYearofMaxAlive(peoples);
+                        //2nd approach, visit every person in list and mark live years in dictionary
+                        Dictionary<int, int> resultYears2 = Process.GetYearofMaxAlive2(peoples);
+
+
                         foreach (var p in peoples)
                         {
                             Console.WriteLine(p.Name + " " + p.BornYear + " " + p.DieYear);

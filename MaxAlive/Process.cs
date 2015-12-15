@@ -36,6 +36,43 @@ namespace MaxAlive
 
             return resultYears;
         }
+        /// <summary>
+        /// 2nd approach: iterate through people once and for each person, mark the corresponding live year cells in dictionary.
+        /// </summary>
+        /// <param name="peoples"></param>
+        /// <returns></returns>
+        public static Dictionary<int, int> GetYearofMaxAlive2(List<People> peoples)
+        {
+            Dictionary<int, int> yearHolder = new Dictionary<int, int>();
+            for (int i = 1900; i < 2001; i++)
+            {
+                yearHolder.Add(i, 0);
+            }
+            foreach (var p in peoples)
+            {
+                int leftB = GetLeftBound(p.BornYear);
+                int rightB = GetRightBound(p.DieYear);
+                if (leftB != -1 && rightB != -1)
+                {
+                    //loop from lower to upper year bound to mark for this person's lived years.
+                    for (int i = leftB; i <= rightB; i++)
+                    {
+                        yearHolder[i] = yearHolder[i] + 1;
+                    }
+                }
+            }
+            //find Max year, 
+            int maxLives = yearHolder.Values.Max();
+            //subset year,count pair from original library that contains Max value.
+            var resultYears = yearHolder.Where(a => a.Value == maxLives).ToDictionary(dict => dict.Key, dict => dict.Value);
+
+            return resultYears;
+        }
+
+
+
+
+
 
         /// <summary>
         /// Compare birth year with time range (1900-2000) and get the beginning marking key that within yearholder range        

@@ -54,7 +54,7 @@ namespace UnitTes
         /// YearHolder is a key/value dictionary to hold range of evaluations, Key = years within 1900 to 2000
         /// </summary>
         [TestMethod]
-        public void TestYearHolderRange()
+        public void TestYearHolderRange_GetYearofMaxAlive()
         {
             var maxAlives = Process.GetYearofMaxAlive(Samples.GeneratePeopleslList(1000));
             Assert.IsTrue(maxAlives.Values.Min()>=0); //check Dictionary value initial
@@ -116,5 +116,44 @@ namespace UnitTes
                 Assert.AreEqual(1, year.Value);
             }
         }
+ #region "TestGetYearofMaxAlive2"
+        [TestMethod]
+        public void TestYearHolderRange_GetYearofMaxAlive2()
+        {
+            var maxAlives = Process.GetYearofMaxAlive2(Samples.GeneratePeopleslList(1000));
+            Assert.IsTrue(maxAlives.Values.Min() >= 0); //check Dictionary value initial
+            Assert.IsTrue(maxAlives.Keys.Min() >= 1900);
+            Assert.IsTrue(maxAlives.Keys.Max() <= 2000);
+            Assert.IsTrue(maxAlives.Count <= 101);
+        }
+        [TestMethod]
+        public void TestGetYearofMaxAlive2ForOverlapCases()
+        {
+            List<People> peoples = new List<People>();
+            peoples.Add(new People("P1", 1890, 1905));
+            peoples.Add(new People("p2", 1900, 1950));
+            var maxAlives = Process.GetYearofMaxAlive2(peoples);
+            Assert.AreEqual(6, maxAlives.Count());
+            foreach (var year in maxAlives)
+            {
+                Assert.AreEqual(2, year.Value);
+            }
+        }
+        [TestMethod]
+        public void TestGetYearofMaxAlive2For_NO_OverlapCases()
+        {
+            List<People> peoples = new List<People>();
+            peoples.Add(new People("P1", 1910, 1913));
+            peoples.Add(new People("p2", 1995, 2010));
+            var maxAlives = Process.GetYearofMaxAlive2(peoples);
+            Assert.AreEqual(10, maxAlives.Count());
+            foreach (var year in maxAlives)
+            {
+                Assert.AreEqual(1, year.Value);
+            }
+        }
+
+        #endregion
+
     }
 }
