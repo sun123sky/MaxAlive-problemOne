@@ -119,5 +119,10 @@ namespace MaxAlive
             }
             return rightBound;
         }
+
+        public static void tryBranch()
+        {
+            
+        }
     }
 }
